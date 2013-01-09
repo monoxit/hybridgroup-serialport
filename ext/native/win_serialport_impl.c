@@ -63,6 +63,7 @@ VALUE RB_SERIAL_EXPORT sp_create_impl(class, _port)
    char port[260]; /* Windows XP MAX_PATH. See http://msdn.microsoft.com/en-us/library/aa365247(VS.85).aspx */
 
    DCB dcb;
+   COMMTIMEOUTS ct;
 
    NEWOBJ(sp, struct RFile);
    rb_secure(4);
@@ -138,6 +139,18 @@ VALUE RB_SERIAL_EXPORT sp_create_impl(class, _port)
       _rb_win32_fail(sSetCommState);
    }
 
+   ct.ReadIntervalTimeout = MAXDWORD;
+   ct.ReadTotalTimeoutConstant = 0;
+   ct.ReadTotalTimeoutMultiplier = MAXDWORD;
+   ct.WriteTotalTimeoutConstant = 0;
+   ct.WriteTotalTimeoutMultiplier = 0;
+
+   if(SetCommTimeouts(fh, &ct) == 0)
+   {
+     rb_sys_fail(port);
+   }
+
+   
    errno = 0;
    return (VALUE) sp;
 }

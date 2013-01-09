@@ -417,8 +417,24 @@ static VALUE sp_write(self, str)
 {
   char *c_str = RSTRING_PTR(str);
   int len = RSTRING_LEN(str);
-  DWORD n=0;
+  DWORD n = 0;
   return WriteFile(rb_iv_get(self,"@@fh"), c_str, len, &n, NULL);
+}
+
+static VALUE sp_read(self, bytes)
+	VALUE self;
+	int bytes;
+{
+  char ReadBuffer[bytes];
+  DWORD n = 0;
+  ReadFile(rb_iv_get(self,"@@fh"), ReadBuffer, bytes, &n, NULL);
+  return rb_str_new(ReadBuffer, bytes); 
+}
+
+static void sp_close(self)
+	VALUE self;
+{
+	CloseHandle(rb_iv_get(self,"@@fh"));
 }
 
 /*
@@ -499,7 +515,10 @@ void Init_serialport()
    /* the package's version as a string "X.Y.Z", beeing major, minor and patch level */
    rb_define_const(cSerialPort, "VERSION", rb_str_new2(RUBY_SERIAL_PORT_VERSION));
 
-   // write test
-   rb_define_method(cSerialPort, "write_test", sp_write, 1);
+#ifdef WIN32
+   rb_define_method(cSerialPort, "write", sp_write, 1);
+   rb_define_method(cSerialPort, "read", sp_read, 1);
+   rb_define_method(cSerialPort, "close", sp_close, 0);
    rb_define_class_variable(cSerialPort,"@@fh",NULL);
+#endif
 }
