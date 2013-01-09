@@ -36,7 +36,7 @@ static char sSetCommTimeouts[] = "SetCommTimeouts";
 static HANDLE get_handle_helper(obj)
    VALUE obj;
 {
-  return (HANDLE) rb_iv_get(obj,"@@fh");
+  return rb_iv_get(obj,"@@fh");
 }
 
 /* hack to work around the fact that Ruby doesn't use GetLastError? */
@@ -106,7 +106,7 @@ VALUE RB_SERIAL_EXPORT sp_create_impl(class, _port)
 
    if (fh == INVALID_HANDLE_VALUE){
       CloseHandle(fh);
-      rb_raise(port);
+      rb_sys_fail(port);
    }
 
    if (SetupComm(fh, 1024, 1024) == 0)

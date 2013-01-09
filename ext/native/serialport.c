@@ -500,6 +500,6 @@ void Init_serialport()
    rb_define_const(cSerialPort, "VERSION", rb_str_new2(RUBY_SERIAL_PORT_VERSION));
 
    // write test
-   rb_define_method(cSerialPort, "write_test", sp_write, 2)
-   rb_define_class_variable(cSerialPort,"@@fh",NULL)
+   rb_define_method(cSerialPort, "write_test", sp_write, 2);
+   rb_define_class_variable(cSerialPort,"@@fh",NULL);
 }
