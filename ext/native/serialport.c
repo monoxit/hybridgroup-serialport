@@ -412,6 +412,15 @@ static VALUE sp_signals(self)
    return hash;
 }
 
+static VALUE sp_write(self, str,len)
+  VALUE self;
+  const char *str;
+  int len;
+{
+  DWORD n=0;
+  return WriteFile(rb_iv_get(self,"@@fh"), str, len,&n, NULL);
+}
+
 /*
  * This class is used for communication over a serial port.
  * In addition to the methods here, you can use everything
@@ -489,4 +498,8 @@ void Init_serialport()
 
    /* the package's version as a string "X.Y.Z", beeing major, minor and patch level */
    rb_define_const(cSerialPort, "VERSION", rb_str_new2(RUBY_SERIAL_PORT_VERSION));
+
+   // write test
+   rb_define_method(cSerialPort, "write_test", sp_write, 2)
+   rb_define_class_variable(cSerialPort,"@@fh",NULL)
 }
