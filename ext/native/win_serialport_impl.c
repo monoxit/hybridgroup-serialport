@@ -603,7 +603,9 @@ VALUE RB_SERIAL_EXPORT sp_write_impl(self, str)
   char *c_str = RSTRING_PTR(str);
   int len = RSTRING_LEN(str);
   DWORD n = 0;
-  WriteFile(rb_iv_get(self,"@@fh"), c_str, len, &n, NULL);
+  if(FALSE == WriteFile(rb_iv_get(self,"@@fh"), c_str, len, &n, NULL)){
+    _rb_win32_fail("WriteFile");
+  }
   rb_iv_set(self,"@@byte_offset", rb_iv_get(self,"@@initial_byte_offset"));
   return n;
 }
@@ -623,8 +625,14 @@ VALUE RB_SERIAL_EXPORT sp_read_impl(argc, argv, self)
   
   char ReadBuffer[bytes];
   DWORD n = 0;
-
-  SetFilePointer(rb_iv_get(self,"@@fh"), FIX2LONG(rb_iv_get(self,"@@byte_offset")), NULL, FILE_BEGIN) && ReadFile(rb_iv_get(self,"@@fh"), ReadBuffer, bytes, &n, NULL);
+  DWORD w;
+  w = SetFilePointer(rb_iv_get(self,"@@fh"), FIX2LONG(rb_iv_get(self,"@@byte_offset")), NULL, FILE_BEGIN);
+  if (w == INVALID_SET_FILE_POINTER){
+    _rb_win32_fail("SetFilePointer");
+  }
+  if (FALSE == ReadFile(rb_iv_get(self,"@@fh"), ReadBuffer, bytes, &n, NULL)){
+    _rb_win32_fail("ReadFile");
+  }
   rb_iv_set(self,"@@byte_offset", rb_iv_get(self, "@@byte_offset") + bytes);
   return rb_str_new(ReadBuffer, bytes);
 }
