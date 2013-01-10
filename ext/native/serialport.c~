@@ -524,5 +524,6 @@ void Init_serialport()
    rb_define_method(cSerialPort, "close", sp_close, 0);
    rb_define_class_variable(cSerialPort,"@@fh",NULL);
    rb_define_class_variable(cSerialPort,"@@byte_offset",0);
+   rb_define_class_variable(cSerialPort,"@@byte_offset",0);
 #endif
 }

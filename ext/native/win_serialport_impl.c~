@@ -101,7 +101,7 @@ VALUE RB_SERIAL_EXPORT sp_create_impl(class, _port)
          break;
    }
 
-   fh = CreateFile(port, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+   fh = CreateFile(port, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL|FILE_FLAG_OVERLAPPED, NULL);
    rb_iv_set(sp,"@@fh",fh);
 
    if (fh == INVALID_HANDLE_VALUE){
