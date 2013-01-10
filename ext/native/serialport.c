@@ -423,6 +423,11 @@ static VALUE sp_read(self, bytes)
 {
   return sp_read_impl(self, bytes);
 }
+static VALUE sp_read(self)
+	VALUE self;
+{
+  return sp_read_impl(self, rb_iv_get(self, 1024);
+}
 
 static void sp_close(self)
 	VALUE self;
@@ -517,6 +522,7 @@ void Init_serialport()
 #ifdef WIN32
    rb_define_method(cSerialPort, "write", sp_write, 1);
    rb_define_method(cSerialPort, "read", sp_read, 1);
+   rb_define_method(cSerialPort, "read", sp_read, 0);
    rb_define_method(cSerialPort, "close", sp_close, 0);
    rb_define_class_variable(cSerialPort,"@@fh",NULL);
    rb_define_class_variable(cSerialPort,"@@byte_offset",0);
