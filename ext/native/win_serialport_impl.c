@@ -59,9 +59,9 @@ VALUE RB_SERIAL_EXPORT sp_create_impl(class, _port)
 
    DCB dcb;
 
-   NEWOBJ(sp, struct RClass);
+   NEWOBJ(sp, struct RObject);
    rb_secure(4);
-   OBJSETUP(sp, class, T_Class);
+   OBJSETUP(sp, class, T_OBJECT);
 
    switch(TYPE(_port))
    {
@@ -608,15 +608,25 @@ VALUE RB_SERIAL_EXPORT sp_write_impl(self, str)
   return n;
 }
 
-VALUE RB_SERIAL_EXPORT sp_read_impl(self, bytes)
-  VALUE self, bytes;
+VALUE RB_SERIAL_EXPORT sp_read_impl(argc, argv, self)
+  int argc;
+  VALUE *argv, self;
 {
-  long c_bytes = FIX2LONG(bytes);
-  char ReadBuffer[c_bytes];
+  long bytes = 1024;
+
+  if (argc > 1){
+    rb_raise(rb_eArgError, "Wrong number of arguments in read()");
+  }
+  else if (argc == 1){
+    bytes = FIX2LONG(argv[0]); 
+  }
+  
+  char ReadBuffer[bytes];
   DWORD n = 0;
-  SetFilePointer(rb_iv_get(self,"@@fh"), FIX2LONG(rb_iv_get(self,"@@byte_offset")), NULL, FILE_BEGIN) && ReadFile(rb_iv_get(self,"@@fh"), ReadBuffer, c_bytes, &n, NULL);
-  rb_iv_set(self,"@@byte_offset", rb_iv_get(self, "@@byte_offset")+c_bytes);
-  return rb_str_new(ReadBuffer, c_bytes);
+
+  SetFilePointer(rb_iv_get(self,"@@fh"), FIX2LONG(rb_iv_get(self,"@@byte_offset")), NULL, FILE_BEGIN) && ReadFile(rb_iv_get(self,"@@fh"), ReadBuffer, bytes, &n, NULL);
+  rb_iv_set(self,"@@byte_offset", rb_iv_get(self, "@@byte_offset") + bytes);
+  return rb_str_new(ReadBuffer, bytes);
 }
 
 void RB_SERIAL_EXPORT sp_close_impl(self)
