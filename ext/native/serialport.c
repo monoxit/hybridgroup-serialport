@@ -470,7 +470,20 @@ void Init_serialport()
    rb_gc_register_address(&sDcd);
    rb_gc_register_address(&sRi);
 
+#if (defined(OS_MSWIN) || defined(OS_BCCWIN) || defined(OS_MINGW))
+   cSerialPort = rb_define_class("SerialPort", rb_cObject);
+   rb_define_method(cSerialPort, "write", sp_write, 1);
+   rb_define_method(cSerialPort, "read", sp_read, 1);
+   rb_define_method(cSerialPort, "read", sp_read, 0);
+   rb_define_method(cSerialPort, "close", sp_close, 0);
+   rb_define_class_variable(cSerialPort,"@@fh",NULL);
+   rb_define_class_variable(cSerialPort,"@@byte_offset",0);
+   rb_define_class_variable(cSerialPort,"@@initial_offset",0);
+   rb_define_method(cSerialPort, "initial_byte_offset=", sp_set_initial_offset, 1);
+#else
    cSerialPort = rb_define_class("SerialPort", rb_cIO);
+#endif
+  
    rb_define_singleton_method(cSerialPort, "create", sp_create, 1);
 
    rb_define_method(cSerialPort, "get_modem_params", sp_get_modem_params, 0);
@@ -519,14 +532,4 @@ void Init_serialport()
    /* the package's version as a string "X.Y.Z", beeing major, minor and patch level */
    rb_define_const(cSerialPort, "VERSION", rb_str_new2(RUBY_SERIAL_PORT_VERSION));
 
-#ifdef WIN32
-   rb_define_method(cSerialPort, "write", sp_write, 1);
-   rb_define_method(cSerialPort, "read", sp_read, 1);
-   rb_define_method(cSerialPort, "read", sp_read, 0);
-   rb_define_method(cSerialPort, "close", sp_close, 0);
-   rb_define_class_variable(cSerialPort,"@@fh",NULL);
-   rb_define_class_variable(cSerialPort,"@@byte_offset",0);
-   rb_define_class_variable(cSerialPort,"@@initial_offset",0);
-   rb_define_method(cSerialPort, "initial_byte_offset=", sp_set_initial_offset, 1);
-#endif
 }

@@ -51,11 +51,6 @@ static void _rb_win32_fail(const char *function_call) {
 VALUE RB_SERIAL_EXPORT sp_create_impl(class, _port)
    VALUE class, _port;
 {
-#ifdef HAVE_RUBY_IO_H
-  rb_io_t *fp;
-#else
-   OpenFile *fp;
-#endif
    int fd;
    HANDLE fh;
    int num_port;
@@ -64,10 +59,9 @@ VALUE RB_SERIAL_EXPORT sp_create_impl(class, _port)
 
    DCB dcb;
 
-   NEWOBJ(sp, struct RFile);
+   NEWOBJ(sp, struct RClass);
    rb_secure(4);
-   OBJSETUP(sp, class, T_FILE);
-   MakeOpenFile((VALUE) sp, fp);
+   OBJSETUP(sp, class, T_Class);
 
    switch(TYPE(_port))
    {
