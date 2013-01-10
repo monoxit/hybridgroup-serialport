@@ -419,7 +419,7 @@ static VALUE sp_write(self, str)
   int len = RSTRING_LEN(str);
   DWORD n = 0;
   WriteFile(rb_iv_get(self,"@@fh"), c_str, len, &n, NULL);
-  rb_iv_set(self,"@@byte_offset", 5);
+  rb_iv_set(self,"@@byte_offset", rb_iv_get(self,"@@initial_byte_offset"));
   return n;
 }
 
@@ -438,6 +438,12 @@ static void sp_close(self)
 	VALUE self;
 {
 	CloseHandle(rb_iv_get(self,"@@fh"));
+}
+
+static void sp_set_initial_offset(self, offset)
+	VALUE self, offset;
+{
+	rb_iv_set(self,"@@initial_byte_offset", FIX2INT(offset));
 }
 
 /*
@@ -524,5 +530,7 @@ void Init_serialport()
    rb_define_method(cSerialPort, "close", sp_close, 0);
    rb_define_class_variable(cSerialPort,"@@fh",NULL);
    rb_define_class_variable(cSerialPort,"@@byte_offset",0);
+   rb_define_class_variable(cSerialPort,"@@initial_offset",0);
+   rb_define_method(cSerialPort, "initial_byte_offset=", sp_set_initial_offset, 1);
 #endif
 }
