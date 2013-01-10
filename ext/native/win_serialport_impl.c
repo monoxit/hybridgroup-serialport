@@ -603,4 +603,38 @@ VALUE RB_SERIAL_EXPORT sp_get_dtr_impl(self)
    return self;
 }
 
+VALUE RB_SERIAL_EXPORT sp_write_impl(self, str)
+  VALUE self, str;
+{
+  char *c_str = RSTRING_PTR(str);
+  int len = RSTRING_LEN(str);
+  DWORD n = 0;
+  WriteFile(rb_iv_get(self,"@@fh"), c_str, len, &n, NULL);
+  rb_iv_set(self,"@@byte_offset", rb_iv_get(self,"@@initial_byte_offset"));
+  return n;
+}
+
+VALUE RB_SERIAL_EXPORT sp_read_impl(self, bytes)
+  VALUE self, bytes;
+{
+  long c_bytes = FIX2LONG(bytes);
+  char ReadBuffer[c_bytes];
+  DWORD n = 0;
+  SetFilePointer(rb_iv_get(self,"@@fh"), FIX2LONG(rb_iv_get(self,"@@byte_offset")), NULL, FILE_BEGIN) && ReadFile(rb_iv_get(self,"@@fh"), ReadBuffer, c_bytes, &n, NULL);
+  rb_iv_set(self,"@@byte_offset", rb_iv_get(self, "@@byte_offset")+c_bytes);
+  return rb_str_new(ReadBuffer, c_bytes);
+}
+
+void RB_SERIAL_EXPORT sp_close_impl(self)
+  VALUE self;
+{
+  CloseHandle(rb_iv_get(self,"@@fh"));
+}
+
+void RB_SERIAL_EXPORT sp_set_initial_offset_impl(self, offset)
+  VALUE self, offset;
+{
+  rb_iv_set(self,"@@initial_byte_offset", FIX2INT(offset));
+}
+
 #endif /* defined(OS_MSWIN) || defined(OS_BCCWIN) || defined(OS_MINGW) */
