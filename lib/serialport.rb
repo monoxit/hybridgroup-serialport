@@ -1,4 +1,4 @@
-if (RUBY_PLATFORM.split("-")[1] == 'darwin')
+if is_osx?
   require 'serialport.bundle'
 else 
   require 'serialport.so'
@@ -48,4 +48,8 @@ class SerialPort
       end
       return sp
    end
+end
+
+def is_osx?
+  return (RUBY_PLATFORM.split("-")[1] == ('darwin')) ? true : false
 end
