@@ -1,4 +1,4 @@
-require 'serialport.so'
+require 'serialport.bundle'
 
 class SerialPort
    private_class_method(:create)
