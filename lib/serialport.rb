@@ -1,4 +1,8 @@
-require 'serialport.bundle'
+if (RUBY_PLATFORM.split("-")[1] == 'darwin')
+  require 'serialport.bundle'
+else 
+  require 'serialport.so'
+end
 
 class SerialPort
    private_class_method(:create)
