@@ -30,7 +30,7 @@ begin
       "ext/native/serialport.h",
       "ext/native/win_serialport_impl.c",
       "lib/serialport.rb",
-      "serialport.gemspec",
+      "hybridgroup-serialport.gemspec",
       "test/miniterm.rb",
       "test/set_readtimeout.rb"
     ]
