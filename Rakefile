@@ -7,7 +7,7 @@ require "rake/extensiontask"
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gemspec|
-    gemspec.name = "serialport"
+    gemspec.name = "hybridgroup-serialport"
     gemspec.summary = "Library for using RS-232 serial ports."
     gemspec.description = "Ruby/SerialPort is a Ruby library that provides a class for using RS-232 serial ports."
     gemspec.email = "serialport@hybridgroup.com"
