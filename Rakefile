@@ -15,7 +15,7 @@ begin
     gemspec.authors = ['Guillaume Pierronnet', 'Alan Stern', 'Daniel E. Shipton', 'Tobin Richard', 'Hector Parra', 'Ryan C. Payne']
     gemspec.has_rdoc = true
     gemspec.extensions << 'ext/native/extconf.rb'
-    gemspec.version = "1.2"
+    gemspec.version = "1.2.0"
     gemspec.files = [
       "CHANGELOG",
       "CHECKLIST",
