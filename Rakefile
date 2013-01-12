@@ -24,8 +24,15 @@ begin
       "README",
       "Rakefile",
       "VERSION",
-      "lib/*",
+      "ext/native/extconf.rb",
+      "ext/native/posix_serialport_impl.c",
+      "ext/native/serialport.c",
+      "ext/native/serialport.h",
+      "ext/native/win_serialport_impl.c",
+      "lib/serialport.rb",
       "serialport.gemspec",
+      "test/miniterm.rb",
+      "test/set_readtimeout.rb"
     ]
 
     Rake::ExtensionTask.new "serialport", gemspec do |ext|
