@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "hybridgroup-serialport"
-  s.version = "1.1.1"
+  s.version = "1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Guillaume Pierronnet", "Alan Stern", "Daniel E. Shipton", "Tobin Richard", "Hector Parra", "Ryan C. Payne"]
@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
     "ext/native/serialport.c",
     "ext/native/serialport.h",
     "ext/native/win_serialport_impl.c",
+    "hybridgroup-serialport.gemspec",
     "lib/serialport.rb",
     "test/miniterm.rb",
     "test/set_readtimeout.rb"
