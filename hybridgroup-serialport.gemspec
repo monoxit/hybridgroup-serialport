@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Guillaume Pierronnet", "Alan Stern", "Daniel E. Shipton", "Tobin Richard", "Hector Parra", "Ryan C. Payne"]
-  s.date = "2013-01-12"
+  s.date = "2013-01-13"
   s.description = "Ruby/SerialPort is a Ruby library that provides a class for using RS-232 serial ports."
   s.email = "serialport@hybridgroup.com"
   s.extensions = ["ext/native/extconf.rb", "ext/native/extconf.rb"]
