@@ -10,4 +10,5 @@ ext/native/serialport.c
 ext/native/serialport.h
 ext/native/win_serialport_impl.c
 lib/serialport.rb
+lib/oscheck.rb
 test/miniterm.rb
