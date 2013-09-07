@@ -425,16 +425,18 @@ static VALUE sp_read(argc, argv, self)
   return sp_read_impl(argc, argv, self);
 }
 
-static void sp_close(self)
+static VALUE sp_close(self)
 	VALUE self;
 {
   sp_close_impl(self);
+  return Qnil;
 }
 
-static void sp_set_initial_offset(self, offset)
+static VALUE sp_set_initial_offset(self, offset)
 	VALUE self, offset;
 {
   sp_set_initial_offset_impl(self, offset);
+  return Qnil;
 }
 
 /*
@@ -471,7 +473,7 @@ void Init_serialport()
    rb_define_method(cSerialPort, "write", sp_write, 1);
    rb_define_method(cSerialPort, "read", sp_read, -1);
    rb_define_method(cSerialPort, "close", sp_close, 0);
-   rb_define_class_variable(cSerialPort,"@@fh",NULL);
+   rb_define_class_variable(cSerialPort,"@@fh",Qnil);
    rb_define_class_variable(cSerialPort,"@@byte_offset",0);
    rb_define_class_variable(cSerialPort,"@@initial_offset",0);
    rb_define_method(cSerialPort, "initial_byte_offset=", sp_set_initial_offset, 1);
