@@ -36,7 +36,9 @@ static char sSetCommTimeouts[] = "SetCommTimeouts";
 static HANDLE get_handle_helper(obj)
    VALUE obj;
 {
-  return rb_iv_get(obj,"@@fh");
+  HANDLE fh;
+  Data_Get_Struct(rb_iv_get(obj,"@@fh"), HANDLE, fh);
+  return fh;
 }
 
 /* hack to work around the fact that Ruby doesn't use GetLastError? */
@@ -53,6 +55,7 @@ VALUE RB_SERIAL_EXPORT sp_create_impl(class, _port)
 {
    int fd;
    HANDLE fh;
+   VALUE vfh;
    int num_port;
    char *str_port;
    char port[260]; /* Windows XP MAX_PATH. See http://msdn.microsoft.com/en-us/library/aa365247(VS.85).aspx */
@@ -76,7 +79,7 @@ VALUE RB_SERIAL_EXPORT sp_create_impl(class, _port)
       break;
 
       case T_STRING:
-         Check_SafeStr(_port);
+         SafeStringValue(_port);
          str_port = RSTRING_PTR(_port);
 		 if (str_port[0] != '\\') /* Check for Win32 Device Namespace prefix "\\.\" */
 		 {
@@ -96,7 +99,8 @@ VALUE RB_SERIAL_EXPORT sp_create_impl(class, _port)
    }
 
    fh = CreateFile(port, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-   rb_iv_set(sp,"@@fh",fh);
+   vfh = Data_Wrap_Struct(class, 0, CloseHandle, fh);
+   rb_iv_set((VALUE) sp,"@@fh",vfh);
 
    if (fh == INVALID_HANDLE_VALUE){
       CloseHandle(fh);
@@ -602,8 +606,10 @@ VALUE RB_SERIAL_EXPORT sp_write_impl(self, str)
 {
   char *c_str = RSTRING_PTR(str);
   int len = RSTRING_LEN(str);
+  HANDLE fh;
   DWORD n = 0;
-  if(FALSE == WriteFile(rb_iv_get(self,"@@fh"), c_str, len, &n, NULL)){
+  Data_Get_Struct(rb_iv_get(self,"@@fh"), HANDLE, fh);
+  if(FALSE == WriteFile(fh, c_str, len, &n, NULL)){
     _rb_win32_fail("WriteFile");
   }
   rb_iv_set(self,"@@byte_offset", rb_iv_get(self,"@@initial_byte_offset"));
@@ -626,11 +632,13 @@ VALUE RB_SERIAL_EXPORT sp_read_impl(argc, argv, self)
   char ReadBuffer[bytes];
   DWORD n = 0;
   DWORD w;
-  w = SetFilePointer(rb_iv_get(self,"@@fh"), FIX2LONG(rb_iv_get(self,"@@byte_offset")), NULL, FILE_BEGIN);
+  HANDLE fh;
+  Data_Get_Struct(rb_iv_get(self,"@@fh"), HANDLE, fh);
+  w = SetFilePointer(fh, FIX2LONG(rb_iv_get(self,"@@byte_offset")), NULL, FILE_BEGIN);
   if (w == INVALID_SET_FILE_POINTER){
     _rb_win32_fail("SetFilePointer");
   }
-  if (FALSE == ReadFile(rb_iv_get(self,"@@fh"), ReadBuffer, bytes, &n, NULL)){
+  if (FALSE == ReadFile(fh, ReadBuffer, bytes, &n, NULL)){
     _rb_win32_fail("ReadFile");
   }
   rb_iv_set(self,"@@byte_offset", rb_iv_get(self, "@@byte_offset") + bytes);
@@ -640,7 +648,9 @@ VALUE RB_SERIAL_EXPORT sp_read_impl(argc, argv, self)
 void RB_SERIAL_EXPORT sp_close_impl(self)
   VALUE self;
 {
-  CloseHandle(rb_iv_get(self,"@@fh"));
+  HANDLE fh;
+  Data_Get_Struct(rb_iv_get(self,"@@fh"), HANDLE, fh);
+  CloseHandle(fh);
 }
 
 void RB_SERIAL_EXPORT sp_set_initial_offset_impl(self, offset)
