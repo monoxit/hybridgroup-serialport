@@ -37,7 +37,7 @@ static HANDLE get_handle_helper(obj)
    VALUE obj;
 {
   HANDLE fh;
-  Data_Get_Struct(rb_iv_get(obj,"@@fh"), HANDLE, fh);
+  Data_Get_Struct(rb_iv_get(obj,"@fh"), HANDLE, fh);
   return fh;
 }
 
@@ -100,7 +100,7 @@ VALUE RB_SERIAL_EXPORT sp_create_impl(class, _port)
 
    fh = CreateFile(port, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
    vfh = Data_Wrap_Struct(class, 0, CloseHandle, fh);
-   rb_iv_set((VALUE) sp,"@@fh",vfh);
+   rb_iv_set((VALUE) sp,"@fh",vfh);
 
    if (fh == INVALID_HANDLE_VALUE){
       CloseHandle(fh);
@@ -608,11 +608,11 @@ VALUE RB_SERIAL_EXPORT sp_write_impl(self, str)
   int len = RSTRING_LEN(str);
   HANDLE fh;
   DWORD n = 0;
-  Data_Get_Struct(rb_iv_get(self,"@@fh"), HANDLE, fh);
+  Data_Get_Struct(rb_iv_get(self,"@fh"), HANDLE, fh);
   if(FALSE == WriteFile(fh, c_str, len, &n, NULL)){
     _rb_win32_fail("WriteFile");
   }
-  rb_iv_set(self,"@@byte_offset", rb_iv_get(self,"@@initial_byte_offset"));
+  rb_iv_set(self,"@byte_offset", rb_iv_get(self,"@initial_byte_offset"));
   return n;
 }
 
@@ -633,15 +633,15 @@ VALUE RB_SERIAL_EXPORT sp_read_impl(argc, argv, self)
   DWORD n = 0;
   DWORD w;
   HANDLE fh;
-  Data_Get_Struct(rb_iv_get(self,"@@fh"), HANDLE, fh);
-  w = SetFilePointer(fh, FIX2LONG(rb_iv_get(self,"@@byte_offset")), NULL, FILE_BEGIN);
+  Data_Get_Struct(rb_iv_get(self,"@fh"), HANDLE, fh);
+  w = SetFilePointer(fh, FIX2LONG(rb_iv_get(self,"@byte_offset")), NULL, FILE_BEGIN);
   if (w == INVALID_SET_FILE_POINTER){
     _rb_win32_fail("SetFilePointer");
   }
   if (FALSE == ReadFile(fh, ReadBuffer, bytes, &n, NULL)){
     _rb_win32_fail("ReadFile");
   }
-  rb_iv_set(self,"@@byte_offset", rb_iv_get(self, "@@byte_offset") + bytes);
+  rb_iv_set(self,"@byte_offset", rb_iv_get(self, "@byte_offset") + bytes);
   return rb_str_new(ReadBuffer, bytes);
 }
 
@@ -649,14 +649,14 @@ void RB_SERIAL_EXPORT sp_close_impl(self)
   VALUE self;
 {
   HANDLE fh;
-  Data_Get_Struct(rb_iv_get(self,"@@fh"), HANDLE, fh);
+  Data_Get_Struct(rb_iv_get(self,"@fh"), HANDLE, fh);
   CloseHandle(fh);
 }
 
 void RB_SERIAL_EXPORT sp_set_initial_offset_impl(self, offset)
   VALUE self, offset;
 {
-  rb_iv_set(self,"@@initial_byte_offset", FIX2INT(offset));
+  rb_iv_set(self,"@initial_byte_offset", offset);
 }
 
 #endif /* defined(OS_MSWIN) || defined(OS_BCCWIN) || defined(OS_MINGW) */
