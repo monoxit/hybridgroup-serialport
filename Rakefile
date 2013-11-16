@@ -7,15 +7,14 @@ require "rake/extensiontask"
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gemspec|
-    gemspec.name = "hybridgroup-serialport"
+    gemspec.name = "monoxit-serialport"
     gemspec.summary = "Library for using RS-232 serial ports."
     gemspec.description = "Ruby/SerialPort is a Ruby library that provides a class for using RS-232 serial ports."
-    gemspec.email = "serialport@hybridgroup.com"
-    gemspec.homepage = 'http://github.com/hybridgroup/ruby-serialport/'
-    gemspec.authors = ['Guillaume Pierronnet', 'Alan Stern', 'Daniel E. Shipton', 'Tobin Richard', 'Hector Parra', 'Ryan C. Payne', 'Adrian Zankich', 'Ron Evans']
-    gemspec.has_rdoc = true
+    gemspec.email = "myamakawa@monoxit.com"
+    gemspec.homepage = 'http://github.com/MONOXIT/ruby-serialport/'
+    gemspec.authors = ['Guillaume Pierronnet', 'Alan Stern', 'Daniel E. Shipton', 'Tobin Richard', 'Hector Parra', 'Ryan C. Payne', 'Adrian Zankich', 'Ron Evans', 'Masami Yamakawa']
     gemspec.extensions << 'ext/native/extconf.rb'
-    gemspec.version = "1.2.1"
+    gemspec.version = "1.2.1.1"
     gemspec.files = [
       "CHANGELOG",
       "CHECKLIST",
@@ -31,7 +30,7 @@ begin
       "ext/native/win_serialport_impl.c",
       "lib/serialport.rb",
       "lib/oscheck.rb",
-      "hybridgroup-serialport.gemspec",
+      "monoxit-serialport.gemspec",
       "test/miniterm.rb",
       "test/set_readtimeout.rb"
     ]
