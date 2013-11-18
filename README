@@ -8,10 +8,12 @@ check and set the current state of the signals on the line.
 
 The native Windows version of this library supports Microsoft's Visual C++, Borland's C++, and MinGW compilers.
 
+monoxit-serialport is forked from hybridgroup-serialport and contains some experimental codes for Windows mingw environment.
+
 -- Installation --
 
 Then you can install the gem as normal:
-  sudo gem install serialport
+  sudo gem install monoxit-serialport
 
 -- Testing --
 
