@@ -99,7 +99,7 @@ VALUE RB_SERIAL_EXPORT sp_create_impl(class, _port)
    }
 
    fh = CreateFile(port, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-   vfh = Data_Wrap_Struct(class, 0, CloseHandle, fh);
+   vfh = Data_Wrap_Struct(class, 0, 0, fh);
    rb_iv_set((VALUE) sp,"@fh",vfh);
 
    if (fh == INVALID_HANDLE_VALUE){
