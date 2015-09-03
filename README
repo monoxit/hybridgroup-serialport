@@ -1,5 +1,9 @@
 -----Ruby/SerialPort-----
 
+monoxit-serialport was forked from hybridgroup-serialport and contains some experimental codes for Windows mingw environment.
+monoxit-serialport was crsafted as a workaround to allow bluetooth virtual serial port communication on Windows environment.
+FFI based rubyserial https://rubygems.org/gems/rubyserial, also working with bluetooth virtual serial port on Windows, is now recommended. (9/3/'15)
+
 -- Description --
 
 Ruby/SerialPort is a Ruby library that provides a class for using
@@ -8,7 +12,7 @@ check and set the current state of the signals on the line.
 
 The native Windows version of this library supports Microsoft's Visual C++, Borland's C++, and MinGW compilers.
 
-monoxit-serialport is forked from hybridgroup-serialport and contains some experimental codes for Windows mingw environment.
+
 
 -- Installation --
 
