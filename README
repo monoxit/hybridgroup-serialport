@@ -1,8 +1,8 @@
 -----Ruby/SerialPort-----
 
 monoxit-serialport was forked from hybridgroup-serialport and contains some experimental codes for Windows mingw environment.
-monoxit-serialport was crsafted as a workaround to allow bluetooth virtual serial port communication on Windows environment.
-FFI based rubyserial https://rubygems.org/gems/rubyserial, also working with bluetooth virtual serial port on Windows, is now recommended. (9/3/'15)
+monoxit-serialport was crafted as a workaround to allow bluetooth virtual serial port communication on Windows environment.
+(!) FFI based rubyserial https://rubygems.org/gems/rubyserial is now recommended. rubyserial gem is working fine with bluetooth virtual serial port on Windows. (9/3/'15)
 
 -- Description --
 
